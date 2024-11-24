@@ -5,9 +5,9 @@ INSERT INTO users (username, password) VALUES
 ('ksm345','12345678'),
 ('ksm123454','12345678');
 
---INSERT INTO member (email, password) VALUES
---('user1@example.com', 'WelcomeToOurWebsite123'),
---('user2@example.com', 'ProductivityTips2024'),
---('user3@example.com', 'HealthyEating2024'),
---('user4@example.com', 'Events2024List'),
---('user5@example.com', 'LearningSQLGuide');
+INSERT INTO article (user_Id, content, location, date_Posted) VALUES
+('1', '내용1','1234','2024-11-19'),
+('2', '내용1','234','2024-11-19'),
+('3', '내용1','345','2024-11-19'),
+('4', '내용1','43','2024-11-19'),
+('5', '내용1','123','2024-11-19');

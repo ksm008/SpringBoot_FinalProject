@@ -1,0 +1,21 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+{{>layouts/header}}
+<form class="container" action="/articles/create" method="post">
+    <div class="mb-3">
+        <label class="form-label">내용</label>
+        <textarea class="form-control" name="content">content2222</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a href="/main">목록 페이지</a>
+</form>
+{{>layouts/footer}}
+</body>
+</html>

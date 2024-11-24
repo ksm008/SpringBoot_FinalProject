@@ -1,0 +1,74 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Signup</title>
+</head>
+<body>
+{{>layouts/header}}
+<form id="signupForm" class="container" action="/register" method="post">
+    <div class="mb-3">
+        <label class="form-label">아이디</label>
+        <input class="form-control" name="username" id="username" value="">
+<!--        <p id="username-error" style="color: red; display: none;">이미 존재하는 아이디입니다.</p>-->
+    </div>
+    <div class="mb-3">
+        <label class="form-label">비밀번호</label>
+        <input class="form-control" type="password" name="password" id="password">
+    </div>
+<!--    <div class="mb-3">-->
+<!--        <label class="form-label">비밀번호 확인</label>-->
+<!--        <input class="form-control" type="password" name="passwordCheck" id="passwordCheck">-->
+<!--    </div>-->
+<!--    <p id="error-message" style="color: red; display: none;">비밀번호가 일치하지 않습니다.</p>-->
+    <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>
+    <a href="/main">목록으로</a>
+</form>
+{{>layouts/footer}}
+<!--<script>-->
+<!--    let usernames = [];-->
+<!--    fetch('/api/usernames')-->
+<!--        .then(response => response.json())-->
+<!--        .then(data => {-->
+<!--            usernames = data; -->
+<!--        });-->
+
+<!--    const usernameField = document.getElementById('username');-->
+<!--    const usernameError = document.getElementById('username-error');-->
+<!--    const passwordField = document.getElementById('password');-->
+<!--    const passwordCheckField = document.getElementById('passwordCheck');-->
+<!--    const passwordError = document.getElementById('error-message');-->
+<!--    const submitButton = document.getElementById('submitButton');-->
+
+<!--    function validateForm() {-->
+<!--        const username = usernameField.value.trim();-->
+<!--        const password = passwordField.value.trim();-->
+<!--        const passwordCheck = passwordCheckField.value.trim();-->
+
+<!--        let isValid = true;-->
+
+<!--        if (usernames.includes(username)) {-->
+<!--            usernameError.style.display = 'block';-->
+<!--            isValid = false;-->
+<!--        } else {-->
+<!--            usernameError.style.display = 'none';-->
+<!--        }-->
+
+<!--        if (password === "" || passwordCheck === "" || password !== passwordCheck) {-->
+<!--            passwordError.style.display = 'block';-->
+<!--            isValid = false;-->
+<!--        } else {-->
+<!--            passwordError.style.display = 'none';-->
+<!--        }-->
+
+<!--        submitButton.disabled = !isValid;-->
+<!--    }-->
+
+<!--    usernameField.addEventListener('input', validateForm);-->
+<!--    passwordField.addEventListener('input', validateForm);-->
+<!--    passwordCheckField.addEventListener('input', validateForm);-->
+<!--</script>-->
+</body>
+</html>

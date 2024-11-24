@@ -1,0 +1,35 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+{{>layouts/header}}
+{{#logedIn}}
+    <a href="/logout">로그아웃</a>
+    <p>환영합니다, {{username}}!</p>
+{{/logedIn}}
+{{^logedIn}}
+    <a href="/login">로그인</a>
+    <a href="/signup">회원가입</a>
+{{/logedIn}}
+
+<table class="table">
+    <thead>
+    <th scope="col">작성자</th><th scope="col">내용</th><th scope="col">장소</th><th scope="col">올린 시간</th>
+    </thead>
+    <tbody>
+    {{#articleList}}
+        <tr>
+            <th>{{user.username}}</th><td>{{content}}</td><td>{{location}}</td><td>{{datePosted}}</td>
+        </tr>
+    {{/articleList}}
+    </tbody>
+</table>
+<a href="/articles/new">새 글쓰기</a>
+{{>layouts/footer}}
+</body>
+</html>
