@@ -15,23 +15,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+
 @Controller
 public class UserController {
     @Autowired
     UserRepository userRepository;
 
     @GetMapping("/signup")
-    public String signUp(Model model) {
-        List<String> usernames = userRepository.findAll()
-                .stream()
-                .map(User::getUsername)
-                .collect(Collectors.toList());
-
-        model.addAttribute("usernames", usernames);
-
+    public String signUp() {
         return "/articles/signup";
     }
-
 
     @PostMapping("/register")
     public String register(UserForm userForm) {

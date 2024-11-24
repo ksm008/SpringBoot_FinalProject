@@ -8,14 +8,45 @@
 </head>
 <body>
 {{>layouts/header}}
-<form class="container" action="/articles/create" method="post">
+<style>
+    .preview img {
+        max-width: 200px;
+        max-height: 200px;
+        margin: 10px;
+    }
+</style>
+<form class="container" action="/articles/upload" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <input type="file" id="fileInput" name="file" accept="image/*" multiple required>
+    </div>
+    <div class="preview" id="preview"></div>
     <div class="mb-3">
         <label class="form-label">내용</label>
         <textarea class="form-control" name="content">content2222</textarea>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit">업로드</button>
     <a href="/main">목록 페이지</a>
 </form>
 {{>layouts/footer}}
+<script>
+    // 파일 선택 시 미리보기 표시
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        const files = event.target.files; // 선택한 파일 목록
+        const previewContainer = document.getElementById('preview');
+        previewContainer.innerHTML = ""; // 기존 미리보기 초기화
+
+        Array.from(files).forEach(file => {
+            const reader = new FileReader(); // FileReader를 사용해 파일 읽기
+
+            reader.onload = function(e) {
+                const img = document.createElement('img'); // 이미지 태그 생성
+                img.src = e.target.result; // 파일 내용을 이미지 소스로 설정
+                previewContainer.appendChild(img); // 미리보기 컨테이너에 추가
+            };
+
+            reader.readAsDataURL(file); // 파일 읽기 시작 (Base64로 변환)
+        });
+    });
+</script>
 </body>
 </html>
