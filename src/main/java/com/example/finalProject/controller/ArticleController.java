@@ -38,7 +38,7 @@ public class ArticleController {
         return "articles/articleNew";
     }
 
-    private final String UPLOAD_DIR = System.getProperty("user.dir") + "src/main/resources/static/uploads/";
+    private final String UPLOAD_DIR = System.getProperty("user.dir") + "/src/main/resources/static/uploads/";
 
     @PostMapping("/articles/upload")
     public String uploadArticle(@RequestParam("file") MultipartFile[] files,
@@ -96,8 +96,6 @@ public class ArticleController {
                 }
             }
         }
-
-
         return "redirect:/main";
     }
 }

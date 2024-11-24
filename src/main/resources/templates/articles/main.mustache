@@ -19,12 +19,13 @@
 
 <table class="table">
     <thead>
-    <th scope="col">작성자</th><th scope="col">내용</th><th scope="col">장소</th><th scope="col">올린 시간</th>
+    <th scope="col">작성자</th><th scope="col">내용</th>
+<!--    <th scope="col">장소</th><th scope="col">올린 시간</th>-->
     </thead>
     <tbody>
     {{#articleList}}
         <tr>
-            <th>{{user.username}}</th><td>{{content}}</td><td>{{location}}</td><td>{{datePosted}}</td>
+            <th>{{user.username}}</th><td>{{content}}</td>
         </tr>
     {{/articleList}}
     </tbody>
