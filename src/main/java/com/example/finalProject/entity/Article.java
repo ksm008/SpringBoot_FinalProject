@@ -17,14 +17,14 @@ public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    String title;
-    String content;
-    String location;
-    Date datePosted;
 
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
+
+    String content;
+    String location;
+    Date datePosted;
 
     public Article(Long id, String content, String location, Date datePosted) {
         this.id = id;

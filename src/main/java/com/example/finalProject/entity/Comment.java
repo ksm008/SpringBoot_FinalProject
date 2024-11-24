@@ -16,9 +16,11 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @Column(name = "articleId")
-    Long articleId;
-    @Column(name = "userId")
-    Long userId;
+    @ManyToOne
+    @JoinColumn(name = "articleId", referencedColumnName = "id")
+    private Article article;
+    @ManyToOne
+    @JoinColumn(name = "userId", referencedColumnName = "id")
+    private User user;
     String comment;
 }

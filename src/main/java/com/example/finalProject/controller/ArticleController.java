@@ -77,7 +77,7 @@ public class ArticleController {
 
                     // Media 엔티티 생성 및 저장
                     Media media = new Media();
-                    media.setArticleId(article.getId());
+                    media.setArticle(article);
                     media.setFileUrl(userDirectory + "/" + fileName);
                     media.setFileType(file.getContentType());
                     media.setUploadtime(new Date());

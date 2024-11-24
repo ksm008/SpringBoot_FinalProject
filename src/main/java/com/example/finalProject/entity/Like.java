@@ -17,9 +17,12 @@ public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @Column(name = "userId")
-    Long userId;
-    @Column(name = "articleId")
-    Long articleId;
+    @ManyToOne
+    @JoinColumn(name = "articleId", referencedColumnName = "id")
+    private Article article;
+    @ManyToOne
+    @JoinColumn(name = "userId", referencedColumnName = "id")
+    private User user;
+    boolean isLiked;
 
 }
