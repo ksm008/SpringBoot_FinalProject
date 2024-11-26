@@ -4,35 +4,77 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7ae6f570f45c759f820a16cbc11adcb2"></script>
+    <style>
+        .main-container {
+            justify-content: center;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+        }
+        .map-container {
+            width: 500px;
+            height: 300px;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <title>SNS 간단 구현 메인</title>
 </head>
 <body>
+<div class="main-container">
 {{>layouts/header}}
 {{#logedIn}}
     <a href="/logout">로그아웃</a>
     <p>환영합니다, {{username}}!</p>
+    <a href="/articles/new">새 글쓰기</a>
 {{/logedIn}}
 {{^logedIn}}
     <a href="/login">로그인</a>
     <a href="/signup">회원가입</a>
 {{/logedIn}}
-
-<table class="table">
-    <thead>
-    <th scope="col">작성자</th><th scope="col">내용</th>
-<!--    <th scope="col">장소</th><th scope="col">올린 시간</th>-->
-    </thead>
-    <tbody>
+<div class="article-list">
     {{#articleList}}
-        <tr>
-            <th>{{user.username}}</th><td>{{content}}</td>
-        </tr>
+        <div class="article-item">
+            <p><strong>작성자:</strong> {{user.username}}</p>
+            <p><strong>내용:</strong> {{content}}</p>
+            {{#location}}
+                <div class="map-container" id="map-{{id}}"></div>
+                <script>
+                    (function() {
+                        var locationData = "{{location}}".split('|');
+                var address = locationData[0]; // 주소
+                var longitude = parseFloat(locationData[1]); // 경도
+                var latitude = parseFloat(locationData[2]); // 위도
+
+                var container = document.getElementById("map-{{id}}"); // 각 지도의 ID
+                var options = {
+                    center: new kakao.maps.LatLng(latitude, longitude),
+                    level: 3
+                };
+                var map = new kakao.maps.Map(container, options);
+
+                // 마커 생성
+                var markerPosition = new kakao.maps.LatLng(latitude, longitude);
+                var marker = new kakao.maps.Marker({
+                    position: markerPosition
+                });
+                marker.setMap(map);
+
+                // 주소 정보 표시
+                var infowindow = new kakao.maps.InfoWindow({
+                    content: `<div style="padding:5px;">${address}</div>`
+                });
+                infowindow.open(map, marker);
+            })();
+                </script>
+            {{/location}}
+        </div>
+        <hr>
     {{/articleList}}
-    </tbody>
-</table>
-{{#logedIn}}
-<a href="/articles/new">새 글쓰기</a>
-{{/logedIn}}
+</div>
+</div>
 {{>layouts/footer}}
 </body>
 </html>
