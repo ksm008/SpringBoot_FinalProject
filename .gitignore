@@ -37,7 +37,4 @@ out/
 .vscode/
 
 
-src/main/resources/static/uploads/
-!src/main/resources/static/uploads/ksm008/**
-
 
