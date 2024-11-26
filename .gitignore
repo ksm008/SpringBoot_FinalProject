@@ -36,4 +36,9 @@ out/
 ### VS Code ###
 .vscode/
 
+
 src/main/resources/static/uploads/
+!src/main/resources/static/uploads/ksm008/
+!src/main/resources/static/uploads/ksm008/**
+
+

@@ -75,21 +75,22 @@ public class ArticleController {
                     // 파일 저장
                     file.transferTo(filePath.toFile());
 
+                    // **상대 경로로 URL 저장**
+                    String relativeFileUrl = "/uploads/" + currentUser.getUsername() + "/" + fileName;
+
                     // Media 엔티티 생성 및 저장
                     Media media = new Media();
                     media.setArticle(article);
-                    media.setFileUrl(userDirectory + "/" + fileName);
+                    media.setFileUrl(relativeFileUrl); // 상대 경로 저장
                     media.setFileType(file.getContentType());
                     media.setUploadtime(new Date());
                     mediaRepository.save(media);
 
                 } catch (IOException e) {
-                    // 에러 로그 출력
                     e.printStackTrace();
                     model.addAttribute("error", "파일 저장 실패: " + e.getMessage());
                     return "error";
                 } catch (Exception e) {
-                    // 데이터베이스 또는 기타 문제 처리
                     e.printStackTrace();
                     model.addAttribute("error", "데이터 처리 중 오류 발생: " + e.getMessage());
                     return "error";
@@ -98,4 +99,5 @@ public class ArticleController {
         }
         return "redirect:/main";
     }
+
 }

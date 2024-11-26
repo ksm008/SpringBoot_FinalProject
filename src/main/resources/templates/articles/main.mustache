@@ -39,6 +39,12 @@
         <div class="article-item">
             <p><strong>작성자:</strong> {{user.username}}</p>
             <p><strong>내용:</strong> {{content}}</p>
+            {{#mediaList}}
+                <div>
+                    <img src="{{fileUrl}}" alt="사진" style="max-width: 400px;">
+                </div>
+            {{/mediaList}}
+            <br>
             {{#location}}
                 <div class="map-container" id="map-{{id}}"></div>
                 <script>

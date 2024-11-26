@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @ToString
@@ -25,6 +27,9 @@ public class Article {
     String content;
     String location;
     Date datePosted;
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Media> mediaList = new ArrayList<>();
 
     public Article(Long id, String content, String location, Date datePosted) {
         this.id = id;
