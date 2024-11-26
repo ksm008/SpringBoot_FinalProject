@@ -7,9 +7,18 @@
     <script type="text/javascript"
             src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7ae6f570f45c759f820a16cbc11adcb2"></script>
     <style>
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 20px 0;
+            width: 100%;
+        }
         .main-container {
+            display: flex;
             justify-content: center;
+            align-items: center;
             margin: 0 auto;
+            text-align: center;
             font-family: Arial, sans-serif;
         }
         .map-container {
@@ -23,28 +32,23 @@
     <title>SNS 간단 구현 메인</title>
 </head>
 <body>
-<div class="main-container">
 {{>layouts/header}}
-{{#logedIn}}
-    <a href="/logout">로그아웃</a>
-    <p>환영합니다, {{username}}!</p>
-    <a href="/articles/new">새 글쓰기</a>
-{{/logedIn}}
-{{^logedIn}}
-    <a href="/login">로그인</a>
-    <a href="/signup">회원가입</a>
-{{/logedIn}}
+<div class="main-container">
 <div class="article-list">
+    <h1>SNS 간단 구현 페이지</h1>
+    <hr>
     {{#articleList}}
         <div class="article-item">
             <p><strong>작성자:</strong> {{user.username}}</p>
-            <p><strong>내용:</strong> {{content}}</p>
             {{#mediaList}}
                 <div>
                     <img src="{{fileUrl}}" alt="사진" style="max-width: 400px;">
                 </div>
             {{/mediaList}}
             <br>
+            <p><strong>내용:</strong> {{content}}</p>
+            <br>
+            <p><strong>장소</strong></p>
             {{#location}}
                 <div class="map-container" id="map-{{id}}"></div>
                 <script>
