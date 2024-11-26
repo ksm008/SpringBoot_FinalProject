@@ -1,21 +1,45 @@
 <style>
     .loginMenu {
-    width: 100%; /* 전체 너비 */
-    text-align: center; /* 텍스트 중앙 정렬 */
-    margin-bottom: 20px; /* 아래 간격 */
-    padding: 10px 0; /* 상하 여백 */
-    border-bottom: 1px solid #ddd; /* 구분선 */
-    background-color: #f9f9f9; /* 배경색 */
-}
+        width: 100%;
+        text-align: center;
+        margin-bottom: 20px;
+        padding: 10px 0;
+        border-bottom: 1px solid #ddd;
+        background-color: #f9f9f9;
+    }
+
+    .menu-button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #fff;
+        background-color: #007BFF;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .menu-button:hover {
+        background-color: #0056b3;
+    }
+
+    .welcome-message {
+        margin: 10px 0;
+        font-size: 16px;
+        color: #333;
+    }
 </style>
 <div class="loginMenu">
     {{#logedIn}}
-        <a href="/logout">로그아웃</a>
-        <p>환영합니다, {{username}}!</p>
-        <a href="/articles/new">새 글쓰기</a>
+        <button onclick="location.href='/logout'" class="menu-button">로그아웃</button>
+        <p class="welcome-message">환영합니다, {{username}}!</p>
+        <button onclick="location.href='/articles/new'" class="menu-button">새 글쓰기</button>
     {{/logedIn}}
     {{^logedIn}}
-        <a href="/login">로그인</a>
-        <a href="/signup">회원가입</a>
+        <button onclick="location.href='/login'" class="menu-button">로그인</button>
+        <button onclick="location.href='/signup'" class="menu-button">회원가입</button>
     {{/logedIn}}
 </div>
