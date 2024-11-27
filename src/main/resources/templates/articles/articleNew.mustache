@@ -36,6 +36,7 @@
         <button type="button" id="searchButton">검색</button>
     </div>
     <div id="map"></div>
+    <input type="hidden" id="location" name="location">
 
     <button type="submit">업로드</button>
     <a href="/main">목록 페이지</a>
@@ -75,7 +76,9 @@
     // 장소 검색 버튼 클릭 이벤트
     document.getElementById('searchButton').addEventListener('click', function() {
         const keyword = document.getElementById('keyword').value; // 입력한 키워드 가져오기
+        const locationInput = document.getElementById('location');
         if (!keyword.trim()) {
+            locationInput.value = null;
             alert('검색어를 입력하세요.');
             return;
         }
@@ -84,8 +87,10 @@
                 displayMarker(data[0]); // 첫 번째 결과만 표시
             } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
                 alert('검색 결과가 없습니다.');
+                locationInput.value = null;
             } else {
                 alert('검색 중 오류가 발생했습니다.');
+                locationInput.value = null;
             }
         });
     });
@@ -95,6 +100,10 @@
         const coords = new kakao.maps.LatLng(place.y, place.x);
         marker.setPosition(coords); // 마커 위치 설정
         map.setCenter(coords); // 지도를 마커 위치로 이동
+
+        // location 문자열 생성
+        const locationString = `${place.place_name}|${place.x}|${place.y}`;
+        document.getElementById('location').value = locationString;
 
         const infowindow = new kakao.maps.InfoWindow({
             content: `<div style="padding:5px;">${place.place_name}</div>`

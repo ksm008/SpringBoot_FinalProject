@@ -43,6 +43,7 @@ public class ArticleController {
     @PostMapping("/articles/upload")
     public String uploadArticle(@RequestParam("file") MultipartFile[] files,
                                 @RequestParam("content") String content,
+                                @RequestParam("location") String location,
                                 HttpSession session,
                                 Model model){
 
@@ -51,6 +52,7 @@ public class ArticleController {
 
         Article article = new Article();
         article.setContent(content);
+        article.setLocation(location);
         article.setDatePosted(new Date());
         article.setUser(currentUser);
         articleRepository.save(article);
