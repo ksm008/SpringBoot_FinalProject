@@ -1,6 +1,7 @@
 INSERT INTO users (username, password) VALUES
 ('ksm008','1234'),
-('ksm123','1234');
+('ksm123','1234'),
+('test','1234');
 
 INSERT INTO article (user_Id, content, location, date_Posted) VALUES
 ('1', '2023년 월디페에 갔었던 날이다.','서울랜드|127.01870212137163|37.43390283191043','2024-11-19'),
