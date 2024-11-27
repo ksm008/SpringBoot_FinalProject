@@ -4,7 +4,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>새 게시글 작성</title>
     <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7ae6f570f45c759f820a16cbc11adcb2&libraries=services"></script>
 </head>
 <body>
@@ -22,12 +22,12 @@
 </style>
 <form class="container" action="/articles/upload" method="post" enctype="multipart/form-data">
     <div class="mb-3">
-        <input type="file" id="fileInput" name="file" accept="image/*" multiple>
+        <input type="file" id="fileInput" name="file" accept="image/*">
     </div>
     <div class="preview" id="preview"></div>
     <div class="mb-3">
         <label class="form-label">내용</label>
-        <textarea class="form-control" name="content">content2222</textarea>
+        <textarea class="form-control" placeholder="내용을 입력하세요" name="content"></textarea>
     </div>
 
     <div class="mb-3">

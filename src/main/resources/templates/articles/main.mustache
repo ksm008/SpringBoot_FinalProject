@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script type="text/javascript"
             src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7ae6f570f45c759f820a16cbc11adcb2"></script>
+    <title>SNS 간단 구현 메인</title>
     <style>
         hr {
             border: none;
@@ -61,7 +62,6 @@
         color: #333;
     }
     </style>
-    <title>SNS 간단 구현 메인</title>
 </head>
 <body>
 <div class="loginMenu">
@@ -78,16 +78,20 @@
 <div class="main-container">
     <div class="article-list">
         <h1>SNS 간단 구현 페이지</h1>
-        <hr>    {{#articleList}}
+        <hr>
+        {{#articleList}}
         <div class="article-item">
+            <p><strong>작성글 번호:</strong> {{id}}</p>
             <p><strong>작성자:</strong> {{user.username}}</p>
             {{#mediaList}}
                 <div>
                     <img src="{{fileUrl}}" alt="사진" style="max-width: 400px;">
-                </div>            {{/mediaList}}
+                </div>
+            {{/mediaList}}
             <br>
             <p><strong>내용:</strong> {{content}}</p>
-            <br>            {{#mediaList}}
+            <br>
+            {{#mediaList}}
             {{#location}}
                 <p><strong>장소</strong></p>
                 <div class="map-container" id="map-{{id}}"></div>
