@@ -85,7 +85,7 @@ public class ArticleController {
                     media.setArticle(article);
                     media.setFileUrl(relativeFileUrl); // 상대 경로 저장
                     media.setFileType(file.getContentType());
-                    media.setUploadtime(new Date());
+                    media.setUploadTime(new Date());
                     mediaRepository.save(media);
 
                 } catch (IOException e) {

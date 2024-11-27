@@ -18,16 +18,17 @@ public class Media {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "articleId", referencedColumnName = "id")
-    private Article article;
-
     @Column(name = "fileUrl")
     String fileUrl;
     @Column(name = "fileType")
     String fileType;
     @Column(name = "uploadTime")
-    Date uploadtime;
+    Date uploadTime;
 
+    @ManyToOne
+    @JoinColumn(name = "articleId", referencedColumnName = "id")
+    private Article article;
+
+    public Media(Long id, String fileUrl, String fileType, Date uploadTime) {
+    }
 }
