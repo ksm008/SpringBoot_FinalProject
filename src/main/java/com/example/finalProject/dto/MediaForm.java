@@ -19,6 +19,7 @@ public class MediaForm {
     String fileUrl;
     String fileType;
     Date uploadTime;
+    private Long articleId;
 
     public Media toEntity() {
         return new Media(id, fileUrl, fileType, uploadTime);

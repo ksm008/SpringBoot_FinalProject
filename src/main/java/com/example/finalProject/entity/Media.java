@@ -37,4 +37,21 @@ public class Media {
         this.fileType = fileType;
         this.uploadTime = uploadTime;
     }
+
+    public void patch(Media media) {
+        if(media.getFileUrl() != null){
+            this.fileUrl = media.getFileUrl();
+        }
+        if(media.getFileType() != null){
+            this.fileType = media.getFileType();
+        }
+        if(media.getUploadTime() != null){
+            this.uploadTime = media.getUploadTime();
+        }
+
+    }
+
+    public void loginfo(){
+        log.info("id: " + id, "fileUrl: " + fileUrl, "fileType: " + fileType, "uploadTime: " + uploadTime);
+    }
 }
