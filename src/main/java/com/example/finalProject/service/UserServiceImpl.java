@@ -3,13 +3,28 @@ package com.example.finalProject.service;
 import com.example.finalProject.dto.UserForm;
 import com.example.finalProject.entity.User;
 import com.example.finalProject.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
+
+    @Override
+    public List<User> index() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public User show(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
 
     @Override
     public User register(UserForm userForm) {
@@ -21,8 +36,25 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
         }
 
+        User registered = userRepository.save(user);
+
         // 데이터베이스에 저장
-        return userRepository.save(user);
+        return registered;
+    }
+
+    @Override
+    public User delete(Long id) {
+        
+        User target = userRepository.findById(id).orElse(null);
+        
+        if (target == null) {
+            log.info("해당 유저가 존재하지 않습니다. User: {}", target.toString());
+            return null;
+
+        }
+        
+        userRepository.delete(target);
+        return target;
     }
 
     @Override
@@ -43,4 +75,10 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public void logout(HttpSession session) {
+        if (session != null) {
+            session.invalidate();
+        }
+    }
 }

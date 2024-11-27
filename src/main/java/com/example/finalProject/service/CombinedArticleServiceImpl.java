@@ -7,6 +7,7 @@ import com.example.finalProject.entity.Media;
 import com.example.finalProject.entity.User;
 import com.example.finalProject.repository.ArticleRepository;
 import com.example.finalProject.repository.MediaRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,9 +17,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.List;
 
 @Service
-public class ArticleServiceImpl implements ArticleService {
+@Slf4j
+public class CombinedArticleServiceImpl implements CombinedArticleService {
     private final String UPLOAD_DIR = System.getProperty("user.dir") + "/src/main/resources/static/uploads/";
 
     @Autowired
@@ -28,12 +31,56 @@ public class ArticleServiceImpl implements ArticleService {
     private MediaRepository mediaRepository;
 
     @Override
-    public Article saveArticle(ArticleForm articleForm, User user) {
-        // DTO를 엔티티로 변환
+    public List<Article> index() {
+        return articleRepository.findAll();
+    }
+
+    @Override
+    public Article show(Long id) {
+        return articleRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Article create(ArticleForm articleForm, User user) {
+        log.info("Service User: {}", user);
+        log.info("ArticleForm: {}", articleForm);
         Article article = articleForm.toEntity();
-        article.setUser(user); // User 정보 설정
-        article.setDatePosted(new Date()); // 게시 날짜 설정
+        article.setUser(user);
+        article.setDatePosted(new Date());
         return articleRepository.save(article);
+    }
+
+    @Override
+    public Article update(Long id, ArticleForm articleForm) {
+        articleForm.setId(-1L);
+
+        Article article = articleForm.toEntity();
+        log.info("id: {}, article: {}", id, article.toString());
+
+        Article target = articleRepository.findById(id).orElse(null);
+
+        if (target == null || id != target.getId()) {
+            log.info("잘못된 요청");
+            return null;
+        }
+
+        target.patch(article);
+        Article updated = articleRepository.save(target);
+        return updated;
+    }
+
+    @Override
+    public Article delete(Long id) {
+        Article target = articleRepository.findById(id).orElse(null);
+
+        if (target == null) {
+            log.info("해당 Article이 없습니다.");
+            return null;
+        }
+
+        articleRepository.delete(target);
+
+        return target;
     }
 
     @Override
@@ -52,7 +99,6 @@ public class ArticleServiceImpl implements ArticleService {
                     Path filePath = userPath.resolve(fileName);
                     file.transferTo(filePath.toFile());
 
-                    // Media 엔티티 생성
                     MediaForm mediaForm = new MediaForm();
                     mediaForm.setFileUrl("/uploads/" + article.getUser().getUsername() + "/" + fileName);
                     mediaForm.setFileType(file.getContentType());

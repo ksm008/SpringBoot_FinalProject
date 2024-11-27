@@ -1,5 +1,6 @@
 package com.example.finalProject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ public class Media {
 
     @ManyToOne
     @JoinColumn(name = "articleId", referencedColumnName = "id")
+    @JsonIgnore
     private Article article;
 
     public Media(Long id, String fileUrl, String fileType, Date uploadTime) {

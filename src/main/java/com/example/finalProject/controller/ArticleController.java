@@ -3,7 +3,7 @@ package com.example.finalProject.controller;
 import com.example.finalProject.dto.ArticleForm;
 import com.example.finalProject.entity.Article;
 import com.example.finalProject.entity.User;
-import com.example.finalProject.service.ArticleService;
+import com.example.finalProject.service.CombinedArticleService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class ArticleController {
     @Autowired
-    ArticleService articleService;
+    CombinedArticleService combinedArticleService;
 
     @GetMapping("/articles/new")
     public String newArticleForm() {
@@ -41,10 +41,10 @@ public class ArticleController {
 
         try {
             // ArticleForm -> Article 변환 및 저장
-            Article article = articleService.saveArticle(articleForm, currentUser);
+            Article article = combinedArticleService.create(articleForm, currentUser);
 
             // 파일 업로드 처리
-            articleService.uploadFiles(files, article);
+            combinedArticleService.uploadFiles(files, article);
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
             return "error";
