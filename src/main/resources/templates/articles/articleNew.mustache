@@ -5,14 +5,19 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7ae6f570f45c759f820a16cbc11adcb2&libraries=services"></script>
 </head>
 <body>
-{{>layouts/header}}
 <style>
     .preview img {
         max-width: 200px;
         max-height: 200px;
         margin: 10px;
+    }
+    #map {
+        width: 500px;
+        height: 300px;
+        margin-top: 20px;
     }
 </style>
 <form class="container" action="/articles/upload" method="post" enctype="multipart/form-data">
@@ -24,6 +29,14 @@
         <label class="form-label">내용</label>
         <textarea class="form-control" name="content">content2222</textarea>
     </div>
+
+    <div class="mb-3">
+        <label class="form-label">장소 검색</label>
+        <input type="text" id="keyword" placeholder="장소를 입력하세요" class="form-control">
+        <button type="button" id="searchButton">검색</button>
+    </div>
+    <div id="map"></div>
+
     <button type="submit">업로드</button>
     <a href="/main">목록 페이지</a>
 </form>
@@ -47,6 +60,47 @@
             reader.readAsDataURL(file); // 파일 읽기 시작 (Base64로 변환)
         });
     });
+
+    // Kakao 지도 및 장소 검색
+    const mapContainer = document.getElementById('map'); // 지도를 표시할 div
+    const mapOption = {
+        center: new kakao.maps.LatLng(37.5665, 126.9780), // 초기 지도 중심 좌표 (서울)
+        level: 3 // 지도의 확대 레벨
+    };
+
+    const map = new kakao.maps.Map(mapContainer, mapOption); // 지도 생성
+    const ps = new kakao.maps.services.Places(); // 장소 검색 객체 생성
+    const marker = new kakao.maps.Marker({ map: map }); // 마커 객체 생성
+
+    // 장소 검색 버튼 클릭 이벤트
+    document.getElementById('searchButton').addEventListener('click', function() {
+        const keyword = document.getElementById('keyword').value; // 입력한 키워드 가져오기
+        if (!keyword.trim()) {
+            alert('검색어를 입력하세요.');
+            return;
+        }
+        ps.keywordSearch(keyword, function(data, status, pagination) {
+            if (status === kakao.maps.services.Status.OK) {
+                displayMarker(data[0]); // 첫 번째 결과만 표시
+            } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+                alert('검색 결과가 없습니다.');
+            } else {
+                alert('검색 중 오류가 발생했습니다.');
+            }
+        });
+    });
+
+    // 검색 결과를 마커로 표시
+    function displayMarker(place) {
+        const coords = new kakao.maps.LatLng(place.y, place.x);
+        marker.setPosition(coords); // 마커 위치 설정
+        map.setCenter(coords); // 지도를 마커 위치로 이동
+
+        const infowindow = new kakao.maps.InfoWindow({
+            content: `<div style="padding:5px;">${place.place_name}</div>`
+        });
+        infowindow.open(map, marker);
+    }
 </script>
 </body>
 </html>

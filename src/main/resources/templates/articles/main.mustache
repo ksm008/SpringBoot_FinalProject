@@ -28,33 +28,71 @@
             border: 1px solid #ddd;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+            .loginMenu {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 20px;
+        padding: 10px 0;
+        border-bottom: 1px solid #ddd;
+        background-color: #f9f9f9;
+    }
+
+    .menu-button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #fff;
+        background-color: #007BFF;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .menu-button:hover {
+        background-color: #0056b3;
+    }
+
+    .welcome-message {
+        margin: 10px 0;
+        font-size: 16px;
+        color: #333;
+    }
     </style>
     <title>SNS 간단 구현 메인</title>
 </head>
 <body>
-{{>layouts/header}}
+<div class="loginMenu">
+    {{#logedIn}}
+        <button onclick="location.href='/logout'" class="menu-button">로그아웃</button>
+        <p class="welcome-message">환영합니다, {{username}}!</p>
+        <button onclick="location.href='/articles/new'" class="menu-button">새 글쓰기</button>
+    {{/logedIn}}
+    {{^logedIn}}
+        <button onclick="location.href='/login'" class="menu-button">로그인</button>
+        <button onclick="location.href='/signup'" class="menu-button">회원가입</button>
+    {{/logedIn}}
+</div>
 <div class="main-container">
-<div class="article-list">
-    <h1>SNS 간단 구현 페이지</h1>
-    <hr>
-    {{#articleList}}
+    <div class="article-list">
+        <h1>SNS 간단 구현 페이지</h1>
+        <hr>    {{#articleList}}
         <div class="article-item">
             <p><strong>작성자:</strong> {{user.username}}</p>
-            <p><strong>게시일:</strong> {{datePosted}}</p>
             {{#mediaList}}
                 <div>
                     <img src="{{fileUrl}}" alt="사진" style="max-width: 400px;">
-                </div>
-            {{/mediaList}}
+                </div>            {{/mediaList}}
             <br>
             <p><strong>내용:</strong> {{content}}</p>
-            <br>
-            <p><strong>장소</strong></p>
+            <br>            {{#mediaList}}
             {{#location}}
+                <p><strong>장소</strong></p>
                 <div class="map-container" id="map-{{id}}"></div>
-                <script>
-                    (function() {
-                        var locationData = "{{location}}".split('|');
+                <script>                        (function() {
+                            var locationData = "{{location}}".split('|');
                 var address = locationData[0]; // 주소
                 var longitude = parseFloat(locationData[1]); // 경도
                 var latitude = parseFloat(locationData[2]); // 위도
@@ -81,10 +119,11 @@
             })();
                 </script>
             {{/location}}
+        {{/mediaList}}
+
         </div>
-        <hr>
-    {{/articleList}}
-</div>
+        <hr>    {{/articleList}}
+    </div>
 </div>
 {{>layouts/footer}}
 </body>
