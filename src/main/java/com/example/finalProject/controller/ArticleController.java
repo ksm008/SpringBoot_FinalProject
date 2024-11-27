@@ -1,5 +1,7 @@
 package com.example.finalProject.controller;
 
+import com.example.finalProject.api.ApiController;
+import com.example.finalProject.api.KaKaoController;
 import com.example.finalProject.entity.Article;
 import com.example.finalProject.entity.Media;
 import com.example.finalProject.entity.User;
@@ -32,6 +34,8 @@ public class ArticleController {
     UserRepository userRepository;
     @Autowired
     MediaRepository mediaRepository;
+    @Autowired
+    KaKaoController kaKaoController; // ApiController 참조
 
     @GetMapping("/articles/new")
     public String newArticleForm() {
@@ -99,7 +103,11 @@ public class ArticleController {
                 }
             }
         }
+
+        // 카카오맵 검색 기능 사용
+        String searchResult = kaKaoController.searchLocation(location);
+        model.addAttribute("searchResult", searchResult);
+
         return "redirect:/main";
     }
-
 }

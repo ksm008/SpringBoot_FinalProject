@@ -37,4 +37,5 @@ out/
 .vscode/
 
 src/main/resources/static/uploads/test/
-
+### 카카오 API 키
+/src/main/resources/application.properties
