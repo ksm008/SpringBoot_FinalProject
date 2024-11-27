@@ -1,12 +1,7 @@
 package com.example.finalProject.dto;
 
 
-import com.example.finalProject.entity.Article;
 import com.example.finalProject.entity.Media;
-import com.example.finalProject.entity.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 

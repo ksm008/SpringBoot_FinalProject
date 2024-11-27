@@ -5,7 +5,6 @@ import com.example.finalProject.entity.Media;
 import com.example.finalProject.entity.User;
 import com.example.finalProject.repository.ArticleRepository;
 import com.example.finalProject.repository.MediaRepository;
-import com.example.finalProject.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

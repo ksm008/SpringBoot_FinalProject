@@ -25,7 +25,6 @@ public class ApiController {
                 .stream()
                 .map(User::getUsername)
                 .collect(Collectors.toList());
-
         return usernames;
     }
 }

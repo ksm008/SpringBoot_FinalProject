@@ -1,11 +1,9 @@
 package com.example.finalProject.controller;
 
+import com.example.finalProject.dto.ArticleForm;
 import com.example.finalProject.entity.Article;
-import com.example.finalProject.entity.Media;
 import com.example.finalProject.entity.User;
-import com.example.finalProject.repository.ArticleRepository;
-import com.example.finalProject.repository.MediaRepository;
-import com.example.finalProject.repository.UserRepository;
+import com.example.finalProject.service.ArticleService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,22 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Date;
-import java.util.List;
-
 @Controller
 @Slf4j
 public class ArticleController {
     @Autowired
-    ArticleRepository articleRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    MediaRepository mediaRepository;
+    ArticleService articleService;
 
     @GetMapping("/articles/new")
     public String newArticleForm() {
@@ -41,64 +28,28 @@ public class ArticleController {
     private final String UPLOAD_DIR = System.getProperty("user.dir") + "/src/main/resources/static/uploads/";
 
     @PostMapping("/articles/upload")
-    public String uploadArticle(@RequestParam("file") MultipartFile[] files,
-                                @RequestParam("content") String content,
-                                @RequestParam("location") String location,
+    public String uploadArticle(ArticleForm articleForm,
+                                @RequestParam("file") MultipartFile[] files,
                                 HttpSession session,
-                                Model model){
+                                Model model) {
 
         User currentUser = (User) session.getAttribute("user");
-        String userDirectory = UPLOAD_DIR + currentUser.getUsername();
-
-        Article article = new Article();
-        article.setContent(content);
-        article.setLocation(location);
-        article.setDatePosted(new Date());
-        article.setUser(currentUser);
-        articleRepository.save(article);
-
-        Path userPath = Paths.get(userDirectory);
-        if (!Files.exists(userPath)) {
-            try {
-                Files.createDirectories(userPath);
-            } catch (IOException e) {
-                model.addAttribute("error", "디렉토리 생성 실패!");
-                return "error";
-            }
+        if (currentUser == null) {
+            model.addAttribute("error", "로그인이 필요합니다.");
+            return "error";
         }
 
-        for (MultipartFile file : files) {
-            if (!file.isEmpty()) {
-                try {
-                    // 파일 경로 생성
-                    String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-                    Path filePath = userPath.resolve(fileName);
+        try {
+            // ArticleForm -> Article 변환 및 저장
+            Article article = articleService.saveArticle(articleForm, currentUser);
 
-                    // 파일 저장
-                    file.transferTo(filePath.toFile());
-
-                    // **상대 경로로 URL 저장**
-                    String relativeFileUrl = "/uploads/" + currentUser.getUsername() + "/" + fileName;
-
-                    // Media 엔티티 생성 및 저장
-                    Media media = new Media();
-                    media.setArticle(article);
-                    media.setFileUrl(relativeFileUrl); // 상대 경로 저장
-                    media.setFileType(file.getContentType());
-                    media.setUploadTime(new Date());
-                    mediaRepository.save(media);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    model.addAttribute("error", "파일 저장 실패: " + e.getMessage());
-                    return "error";
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    model.addAttribute("error", "데이터 처리 중 오류 발생: " + e.getMessage());
-                    return "error";
-                }
-            }
+            // 파일 업로드 처리
+            articleService.uploadFiles(files, article);
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+            return "error";
         }
+
         return "redirect:/main";
     }
 

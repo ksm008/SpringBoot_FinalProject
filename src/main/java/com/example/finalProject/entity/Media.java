@@ -30,5 +30,9 @@ public class Media {
     private Article article;
 
     public Media(Long id, String fileUrl, String fileType, Date uploadTime) {
+        this.id = id;
+        this.fileUrl = fileUrl;
+        this.fileType = fileType;
+        this.uploadTime = uploadTime;
     }
 }
