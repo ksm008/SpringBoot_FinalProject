@@ -6,6 +6,7 @@ import com.example.finalProject.entity.User;
 import com.example.finalProject.repository.ArticleRepository;
 import com.example.finalProject.repository.MediaRepository;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
@@ -14,9 +15,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
+@Slf4j
 public class MainController {
     @Autowired
     ArticleRepository articleRepository;
@@ -45,13 +50,17 @@ public class MainController {
         }
 
         List<Article> articleList = articleRepository.findAll();
+        List<Map<String, Object>> articlesWithAuthor = new ArrayList<>();
 
         articleList.forEach(article -> {
-            List<Media> mediaList = mediaRepository.findByArticleId(article.getId());
-            article.setMediaList(mediaList); // 임시로 List를 설정하는 방식
-        });
+            Map<String, Object> articleWithAuthor = new HashMap<>();
+            articleWithAuthor.put("article", article);
+            articleWithAuthor.put("isAuthor", loggedInUser != null && loggedInUser.getId().equals(article.getUser().getId()));
 
-        model.addAttribute("articleList", articleList);
+            articlesWithAuthor.add(articleWithAuthor);
+        });
+        model.addAttribute("articlesWithAuthor", articlesWithAuthor);
+//        model.addAttribute("articleList", articleList);
         return "articles/main";
     }
 }

@@ -2,6 +2,7 @@ package com.example.finalProject.api;
 
 import com.example.finalProject.dto.ArticleForm;
 import com.example.finalProject.entity.Article;
+import com.example.finalProject.entity.Media;
 import com.example.finalProject.entity.User;
 import com.example.finalProject.service.CombinedArticleService;
 import com.example.finalProject.service.UserService;
@@ -46,38 +47,72 @@ public class ApiController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/api/users")
+    public List<User> indexUser() {
+        return userService.index();
+    }
+
+    @GetMapping("/api/users/{id}")
+    public User showUsers(@PathVariable("id") Long id) {
+        return userService.show(id);
+    }
+
+    @DeleteMapping("/api/users/{id}")
+    public ResponseEntity<User> deleteUsers(@PathVariable("id") Long id) {
+        User deleted = userService.delete(id);
+
+        return (deleted != null) ? ResponseEntity.status(HttpStatus.OK).build() :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
     @GetMapping("/api/articles")
-    public List<Article> index() {
-        return combinedArticleService.index();
+    public List<Article> indexArticle() {
+        return combinedArticleService.indexArticle();
     }
 
     @GetMapping("/api/articles/{id}")
-    public Article show(@PathVariable("id") Long id) {
-        return combinedArticleService.show(id);
+    public Article showArticle(@PathVariable("id") Long id) {
+        return combinedArticleService.showArticle(id);
     }
 
     @PostMapping("/api/articles")
-    public Article create(@RequestBody ArticleForm articleForm, HttpSession session) {
+    public Article createArticle(@RequestBody ArticleForm articleForm, HttpSession session) {
         User user = (User) session.getAttribute("user");
         log.info("user: {}", user);
         log.info("articleForm: {}", articleForm);
-        return combinedArticleService.create(articleForm, user);
+        return combinedArticleService.createArticle(articleForm, user);
     }
 
     @PatchMapping("/api/articles/{id}")
-    public ResponseEntity<Article> update(@PathVariable("id") Long id, @RequestBody ArticleForm articleForm) {
-        Article updated = combinedArticleService.update(id, articleForm);
+    public ResponseEntity<Article> updateArticle(@PathVariable("id") Long id, @RequestBody ArticleForm articleForm) {
+        Article updated = combinedArticleService.updateArticle(id, articleForm);
 
         return (updated != null) ? ResponseEntity.status(HttpStatus.OK).body(updated) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @DeleteMapping("/api/articles/{id}")
-    public ResponseEntity<Article> delete(@PathVariable("id") Long id) {
-        Article deleted = combinedArticleService.delete(id);
+    public ResponseEntity<Article> deleteArticle(@PathVariable("id") Long id) {
+        Article deleted = combinedArticleService.deleteArticle(id);
 
         return (deleted != null) ? ResponseEntity.status(HttpStatus.OK).build() :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+
+    @GetMapping("/api/media")
+    public List<Media> indexMedia() {
+        return combinedArticleService.indexMedia();
+    }
+
+    @GetMapping("/api/media/{id}")
+    public Media showMedia(@PathVariable("id") Long id) {
+        return combinedArticleService.showMedia(id);
+    }
+
+    @GetMapping("/api/media/articles/{articleId}")
+    public List<Media> showSpecificMedia(@PathVariable("articleId") Long articleId) {
+        return combinedArticleService.showSpecificMedia(articleId);
+    }
+
 
 }

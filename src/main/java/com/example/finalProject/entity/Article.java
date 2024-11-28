@@ -30,14 +30,21 @@ public class Article {
     String location;
     Date datePosted;
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "article", cascade = CascadeType.PERSIST, orphanRemoval = false)
     private List<Media> mediaList = new ArrayList<>();
 
-    public Article(Long id, String content, String location, Date datePosted) {
+
+    public Article(Long id, String content, String location, Date datePosted, User user, List<Media> mediaList) {
         this.id = id;
         this.content = content;
         this.location = location;
         this.datePosted = datePosted;
+        this.user = user;
+        this.mediaList = mediaList;
+    }
+
+    public Long getUserId() {
+        return this.user != null ? this.user.getId() : null;
     }
 
     public void patch(Article article) {
@@ -49,6 +56,14 @@ public class Article {
         }
         if(article.datePosted != null) {
             this.datePosted = article.datePosted;
+        }
+        if (article.mediaList != null) {
+            this.mediaList.clear();
+
+            for (Media newMedia : article.mediaList) {
+                newMedia.setArticle(this);
+                this.mediaList.add(newMedia);
+            }
         }
     }
 }

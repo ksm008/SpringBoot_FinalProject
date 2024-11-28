@@ -16,8 +16,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -25,23 +27,42 @@ public class CombinedArticleServiceImpl implements CombinedArticleService {
     private final String UPLOAD_DIR = System.getProperty("user.dir") + "/src/main/resources/static/uploads/";
 
     @Autowired
-    private ArticleRepository articleRepository;
+    ArticleRepository articleRepository;
 
     @Autowired
-    private MediaRepository mediaRepository;
+    MediaRepository mediaRepository;
 
     @Override
-    public List<Article> index() {
-        return articleRepository.findAll();
+    public List<Article> indexArticle() {
+
+        // 모든 Article 가져오기
+        List<Article> articles = articleRepository.findAll();
+
+        // 각 Article에 mediaList 설정
+        articles.forEach(article -> {
+            List<Media> mediaList = mediaRepository.findByArticle_Id(article.getId());
+            article.setMediaList(mediaList); // Article에 mediaList 임시 설정
+            log.info("mediaList: {}", mediaList);
+        });
+        return articles;
     }
 
     @Override
-    public Article show(Long id) {
-        return articleRepository.findById(id).orElse(null);
+    public Article showArticle(Long id) {
+        Article article = articleRepository.findById(id).orElse(null);
+
+        if (article != null) {
+            // 특정 Article에 연결된 Media 리스트 가져오기
+            List<Media> mediaList = mediaRepository.findByArticle_Id(id);
+            article.setMediaList(mediaList); // Article에 Media 리스트 설정
+        }
+        log.info("Total Article : {}", article);
+
+        return article; // Media가 설정된 Article 반환
     }
 
     @Override
-    public Article create(ArticleForm articleForm, User user) {
+    public Article createArticle(ArticleForm articleForm, User user) {
         log.info("Service User: {}", user);
         log.info("ArticleForm: {}", articleForm);
         Article article = articleForm.toEntity();
@@ -51,7 +72,7 @@ public class CombinedArticleServiceImpl implements CombinedArticleService {
     }
 
     @Override
-    public Article update(Long id, ArticleForm articleForm) {
+    public Article updateArticle(Long id, ArticleForm articleForm) {
         articleForm.setId(-1L);
 
         Article article = articleForm.toEntity();
@@ -70,7 +91,7 @@ public class CombinedArticleServiceImpl implements CombinedArticleService {
     }
 
     @Override
-    public Article delete(Long id) {
+    public Article deleteArticle(Long id) {
         Article target = articleRepository.findById(id).orElse(null);
 
         if (target == null) {
@@ -84,9 +105,10 @@ public class CombinedArticleServiceImpl implements CombinedArticleService {
     }
 
     @Override
-    public void uploadFiles(MultipartFile[] files, Article article) {
-        String userDirectory = UPLOAD_DIR + article.getUser().getUsername();
+    public List<Map.Entry<String, String>> uploadFiles(MultipartFile[] files, String username) {
+        String userDirectory = UPLOAD_DIR + username;
         Path userPath = Paths.get(userDirectory);
+        List<Map.Entry<String, String>> uploadedFileInfo = new ArrayList<>();
 
         try {
             if (!Files.exists(userPath)) {
@@ -99,19 +121,74 @@ public class CombinedArticleServiceImpl implements CombinedArticleService {
                     Path filePath = userPath.resolve(fileName);
                     file.transferTo(filePath.toFile());
 
-                    MediaForm mediaForm = new MediaForm();
-                    mediaForm.setFileUrl("/uploads/" + article.getUser().getUsername() + "/" + fileName);
-                    mediaForm.setFileType(file.getContentType());
-                    mediaForm.setUploadTime(new Date());
-                    mediaForm.logInfo();
+                    String fileUrl = "/uploads/" + username + "/" + fileName;
+                    String fileType = file.getContentType();
 
-                    Media media = mediaForm.toEntity();
-                    media.setArticle(article);
-                    mediaRepository.save(media);
+                    // 파일 URL과 타입을 리스트에 추가
+                    uploadedFileInfo.add(Map.entry(fileUrl, fileType));
                 }
             }
         } catch (IOException e) {
             throw new RuntimeException("파일 저장 실패: " + e.getMessage());
         }
+
+        log.info("Uploaded file info: {}", uploadedFileInfo);
+        return uploadedFileInfo; // 업로드된 파일 정보 반환
+    }
+
+    @Override
+    public List<Media> indexMedia() {
+        return mediaRepository.findAll();
+    }
+
+    @Override
+    public Media showMedia(Long id) {
+        return mediaRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Media> showSpecificMedia(Long id) {
+        return mediaRepository.findByArticle_Id(id);
+    }
+
+    @Override
+    public Media createMedia(MediaForm mediaForm, Article article) {
+        Media media = mediaForm.toEntity();
+        media.setArticle(article);
+        log.info("Article: {}", article);
+        log.info("Media: {}", media);
+        return mediaRepository.save(media);
+    }
+
+    @Override
+    public Media updateMedia(Long id, MediaForm mediaForm) {
+        mediaForm.setId(-1L);
+
+        Media media = mediaForm.toEntity();
+
+        Media target = mediaRepository.findById(id).orElse(null);
+
+        if (target == null || id != target.getId()) {
+            return null;
+        }
+
+        target.patch(media);
+        Media updated = mediaRepository.save(target);
+
+        return updated;
+    }
+
+    @Override
+    public Media deleteMedia(Long id) {
+        Media target = mediaRepository.findById(id).orElse(null);
+
+        if (target == null) {
+            log.info("해당 Media가 없습니다.");
+            return null;
+        }
+
+        mediaRepository.delete(target);
+
+        return target;
     }
 }
