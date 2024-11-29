@@ -5,6 +5,7 @@ import com.example.finalProject.entity.Media;
 import com.example.finalProject.entity.User;
 import com.example.finalProject.repository.ArticleRepository;
 import com.example.finalProject.repository.MediaRepository;
+import com.example.finalProject.service.CombinedArticleService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +24,14 @@ import java.util.Map;
 @Controller
 @Slf4j
 public class MainController {
+
     @Autowired
-    ArticleRepository articleRepository;
-    @Autowired
-    MediaRepository mediaRepository;
+    CombinedArticleService combinedArticleService;
 
     @Configuration
     public class WebConfig implements WebMvcConfigurer {
         @Override
         public void addResourceHandlers(ResourceHandlerRegistry registry) {
-            // "/uploads/**" 경로를 실제 파일 시스템 경로에 매핑
             registry.addResourceHandler("/uploads/**")
                     .addResourceLocations("file:" + System.getProperty("user.dir") + "/src/main/resources/static/uploads/");
         }
@@ -49,7 +48,7 @@ public class MainController {
             model.addAttribute("logedIn", false);
         }
 
-        List<Article> articleList = articleRepository.findAll();
+        List<Article> articleList = combinedArticleService.indexArticle();
         List<Map<String, Object>> articlesWithAuthor = new ArrayList<>();
 
         articleList.forEach(article -> {
@@ -60,7 +59,6 @@ public class MainController {
             articlesWithAuthor.add(articleWithAuthor);
         });
         model.addAttribute("articlesWithAuthor", articlesWithAuthor);
-//        model.addAttribute("articleList", articleList);
         return "articles/main";
     }
 }

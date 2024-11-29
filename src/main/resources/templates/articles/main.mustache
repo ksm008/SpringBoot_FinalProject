@@ -35,6 +35,7 @@
                     <h5 class="card-title">작성글 번호: {{article.id}}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">작성자: {{article.user.username}}</h6>
                     <h6 class="card-subtitle mb-2 text-muted">작성자 아이디: {{article.user.id}}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">작성 날짜: {{article.datePosted}}</h6>
                     {{#article.mediaList}}
                         <div class="text-center mb-3">
                             <img src="{{fileUrl}}" alt="사진" class="img-fluid" style="max-width: 400px;">

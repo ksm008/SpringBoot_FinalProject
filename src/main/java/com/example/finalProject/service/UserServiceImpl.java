@@ -1,6 +1,7 @@
 package com.example.finalProject.service;
 
 import com.example.finalProject.dto.UserForm;
+import com.example.finalProject.entity.Article;
 import com.example.finalProject.entity.User;
 import com.example.finalProject.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
@@ -40,6 +41,24 @@ public class UserServiceImpl implements UserService {
 
         // 데이터베이스에 저장
         return registered;
+    }
+
+    @Override
+    public User update(Long id, UserForm userForm) {
+        userForm.setId(-1L);
+
+        User user = userForm.toEntity();
+
+        User target = userRepository.findById(id).orElse(null);
+
+        if (target == null || id != target.getId()) {
+            log.info("잘못된 요청");
+            return null;
+        }
+
+        target.patch(user);
+        User updated = userRepository.save(target);
+        return updated;
     }
 
     @Override

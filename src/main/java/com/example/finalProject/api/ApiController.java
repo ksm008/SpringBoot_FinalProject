@@ -2,6 +2,7 @@ package com.example.finalProject.api;
 
 import com.example.finalProject.dto.ArticleForm;
 import com.example.finalProject.dto.MediaForm;
+import com.example.finalProject.dto.UserForm;
 import com.example.finalProject.entity.Article;
 import com.example.finalProject.entity.Media;
 import com.example.finalProject.entity.User;
@@ -57,6 +58,20 @@ public class ApiController {
     public User showUsers(@PathVariable("id") Long id) {
         return userService.show(id);
     }
+
+    @PostMapping("/api/users")
+    public User createUsers(@RequestBody UserForm userForm) {
+        return userService.register(userForm);
+    }
+
+    @PatchMapping("/api/users/{id}")
+    public ResponseEntity<User> updateArticle(@PathVariable("id") Long id, @RequestBody UserForm userForm) {
+        User updated = userService.update(id, userForm);
+
+        return (updated != null) ? ResponseEntity.status(HttpStatus.OK).body(updated) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
 
     @DeleteMapping("/api/users/{id}")
     public ResponseEntity<User> deleteUsers(@PathVariable("id") Long id) {

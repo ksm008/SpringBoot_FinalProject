@@ -10,6 +10,7 @@ public interface UserService {
     List<User> index();
     User show(Long id);
     User register(UserForm userForm);
+    User update(Long id, UserForm userForm);
     User delete(Long id);
     User login(String username, String password);
     void logout(HttpSession session);

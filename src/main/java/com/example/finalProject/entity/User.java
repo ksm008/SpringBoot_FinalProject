@@ -19,8 +19,18 @@ public class User {
     Long id;
     private String username;
     private String password;
+
     public void logInfo() {
         log.info("id: {}, username: {}, password: {} ",
                 id, username, password);
+    }
+
+    public void patch(User user) {
+        if(user.username != null){
+            this.username = user.username;
+        }
+        if(user.password != null) {
+            this.password = user.password;
+        }
     }
 }
