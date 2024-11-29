@@ -1,6 +1,7 @@
 package com.example.finalProject.api;
 
 import com.example.finalProject.dto.ArticleForm;
+import com.example.finalProject.dto.MediaForm;
 import com.example.finalProject.entity.Article;
 import com.example.finalProject.entity.Media;
 import com.example.finalProject.entity.User;
@@ -104,6 +105,11 @@ public class ApiController {
         return combinedArticleService.indexMedia();
     }
 
+    @PostMapping("/api/media")
+    public Media createMedia(@RequestBody MediaForm mediaForm) {
+        return combinedArticleService.createMedia(mediaForm);
+    }
+
     @GetMapping("/api/media/{id}")
     public Media showMedia(@PathVariable("id") Long id) {
         return combinedArticleService.showMedia(id);
@@ -112,6 +118,22 @@ public class ApiController {
     @GetMapping("/api/media/articles/{articleId}")
     public List<Media> showSpecificMedia(@PathVariable("articleId") Long articleId) {
         return combinedArticleService.showSpecificMedia(articleId);
+    }
+
+    @PatchMapping("/api/media/{id}")
+    public ResponseEntity<Media> updateMedia(@PathVariable("id") Long id, @RequestBody MediaForm mediaForm) {
+        Media updated = combinedArticleService.updateMedia(id, mediaForm);
+
+        return (updated != null) ? ResponseEntity.status(HttpStatus.OK).body(updated) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @DeleteMapping("/api/media/{id}")
+    public ResponseEntity<Media> deleteMedia(@PathVariable("id") Long id) {
+        Media deleted = combinedArticleService.deleteMedia(id);
+
+        return (deleted != null) ? ResponseEntity.status(HttpStatus.OK).build() :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
 

@@ -30,7 +30,7 @@ public class Article {
     String location;
     Date datePosted;
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.PERSIST, orphanRemoval = false)
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE, orphanRemoval = false)
     private List<Media> mediaList = new ArrayList<>();
 
 

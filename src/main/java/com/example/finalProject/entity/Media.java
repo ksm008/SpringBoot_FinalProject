@@ -36,19 +36,13 @@ public class Media {
         }
     }
 
-//    public Long getArticleId() {
-//        return this.article != null ? this.article.getId() : null;
-//    }
+    public Long getArticleId() {
+        return this.article != null ? this.article.getId() : null;
+    }
 
     public Media(String fileUrl, String fileType, Article article) {
         this.fileUrl = fileUrl;
         this.fileType = fileType;
         this.article = article;
     }
-
-//    public Media(Long id, String fileUrl, String fileType) {
-//        this.id = id;
-//        this.fileUrl = fileUrl;
-//        this.fileType = fileType;
-//    }
 }

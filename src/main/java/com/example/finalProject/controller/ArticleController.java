@@ -60,12 +60,13 @@ public class ArticleController {
                         MediaForm mediaForm = new MediaForm();
                         mediaForm.setFileUrl(entry.getKey()); // URL 설정
                         mediaForm.setFileType(entry.getValue()); // 파일 타입 설정
+                        mediaForm.setArticleId(article.getId());
                         return mediaForm;
                     })
                     .toList();
 
             // MediaForm -> Media 변환 및 저장
-            mediaForms.forEach(mediaForm -> combinedArticleService.createMedia(mediaForm, article));
+            mediaForms.forEach(mediaForm -> combinedArticleService.createMedia(mediaForm));
 
             log.info("mediaForms: {}", mediaForms);
 

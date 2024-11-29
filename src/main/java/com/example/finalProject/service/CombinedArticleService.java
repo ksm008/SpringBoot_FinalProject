@@ -16,13 +16,12 @@ public interface CombinedArticleService {
     Article createArticle(ArticleForm articleForm, User user);
     Article updateArticle(Long id, ArticleForm articleForm);
     Article deleteArticle(Long id);
-//    void uploadFiles(MultipartFile[] files, Article article);
     List<Map.Entry<String, String>> uploadFiles(MultipartFile[] files, String username);
 
     List<Media> indexMedia();
     Media showMedia(Long id);
     List<Media> showSpecificMedia(Long id);
-    Media createMedia(MediaForm mediaForm, Article article);
+    Media createMedia(MediaForm mediaForm);
     Media updateMedia(Long id, MediaForm mediaForm);
     Media deleteMedia(Long id);
 }

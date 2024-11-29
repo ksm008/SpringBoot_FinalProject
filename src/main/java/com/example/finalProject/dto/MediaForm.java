@@ -3,10 +3,9 @@ package com.example.finalProject.dto;
 
 import com.example.finalProject.entity.Article;
 import com.example.finalProject.entity.Media;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Date;
 
 @Getter
 @Setter
@@ -16,10 +15,11 @@ import java.util.Date;
 @Slf4j
 public class MediaForm {
 
-    Long id;
-    String fileUrl;
-    String fileType;
-    Long articleId;
+    private Long id;
+    private String fileUrl;
+    private String fileType;
+    @JsonProperty("articleId")
+    private Long articleId;
 
     public Media toEntity() {
         Article article = null;

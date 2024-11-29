@@ -41,7 +41,7 @@ public class CombinedArticleServiceImpl implements CombinedArticleService {
         // 각 Article에 mediaList 설정
         articles.forEach(article -> {
             List<Media> mediaList = mediaRepository.findByArticle_Id(article.getId());
-            article.setMediaList(mediaList); // Article에 mediaList 임시 설정
+            article.setMediaList(mediaList); // Article에 Media 리스트 설정
             log.info("mediaList: {}", mediaList);
         });
         return articles;
@@ -152,10 +152,12 @@ public class CombinedArticleServiceImpl implements CombinedArticleService {
     }
 
     @Override
-    public Media createMedia(MediaForm mediaForm, Article article) {
+    public Media createMedia(MediaForm mediaForm) {
+        Article article = articleRepository.findById(mediaForm.getArticleId())
+                .orElseThrow(() -> new RuntimeException("Article not found"));
+
         Media media = mediaForm.toEntity();
         media.setArticle(article);
-        log.info("Article: {}", article);
         log.info("Media: {}", media);
         return mediaRepository.save(media);
     }
