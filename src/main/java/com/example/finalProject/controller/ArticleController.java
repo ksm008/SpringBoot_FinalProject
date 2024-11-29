@@ -137,35 +137,6 @@ public class ArticleController {
         return "articles/articleEdit";
     }
 
-//    @PostMapping("/articles/update/{id}")
-//    public String uploadArticleFiles(@PathVariable("id") Long id,
-//                                     @RequestParam("file") MultipartFile[] files) {
-//        Article target = combinedArticleService.showArticle(id);
-//        if (target == null) {
-//            throw new RuntimeException("Article not found");
-//        }
-//
-//        List<Map.Entry<String, String>> uploadedFileInfo = combinedArticleService.uploadFiles(files, target.getUser().getUsername());
-//
-//        // 새로운 파일 정보 저장
-//        List<MediaForm> mediaForms = uploadedFileInfo.stream()
-//                .map(entry -> {
-//                    MediaForm mediaForm = new MediaForm();
-//                    mediaForm.setFileUrl(entry.getKey());
-//                    mediaForm.setFileType(entry.getValue());
-//                    return mediaForm;
-//                })
-//                .toList();
-//
-//        mediaForms.forEach(mediaForm -> combinedArticleService.createMedia(mediaForm, target));
-//
-//        log.info("Updated Media List for Article ID {}: {}", id, target.getMediaList());
-//
-//        return "redirect:/main";
-//    }
-
-
-
     @GetMapping("/articles/delete/{id}")
     public String deleteArticles(@PathVariable("id") Long id) {
         combinedArticleService.deleteArticle(id);
