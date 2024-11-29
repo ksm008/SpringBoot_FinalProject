@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Controller
 @Slf4j
-public class ArticleController {
+public class CombinedArticleController {
     @Autowired
     CombinedArticleService combinedArticleService;
 
